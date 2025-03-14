@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Full-screen background image */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5); /* Dark overlay for text contrast */
+            color: orange;
+            font-size: 16px;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .qr_box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            border: 2px solid #4CAF50;
+            padding: 25px;
+            width: 400px;
+            max-width: 100%;
+            transition: 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .qr_box.active {
+            height: 530px;
+        }
+
+        header h1 {
+            font-size: 30px;
+            font-weight: 700;
+            color: yellow;
+            text-align: center;
+        }
+
+        header p {
+            margin-top: 5px;
+            color: orange;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .form {
+            margin: 20px 0;
+        }
+
+        .form input,
+        .form button {
+            width: 100%;
+            height: 50px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 18px;
+            padding: 0 15px;
+            outline: none;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form input {
+            background: orange;
+        }
+
+        .form input::placeholder {
+            color: red;
+        }
+
+        .form input:focus {
+            border-color: purple;
+            background: blue;
+        }
+
+        .form button {
+            color: pink;
+            background: linear-gradient(145deg, #42a22b, #3e8e26);
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .form button:hover {
+            background: linear-gradient(145deg, #3e8e26, #42a22b);
+            transform: translateY(-3px);
+        }
+
+        .qr-code {
+            opacity: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+            padding: 30px 0;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .qr_box.active .qr-code {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .qr-code img {
+            width: 180px;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 480px) {
+            .qr_box {
+                padding: 20px;
+                width: 100%;
+            }
+
+            header h1 {
+                font-size: 24px;
+            }
+
+            .form input, .form button {
+                height: 45px;
+                font-size: 16px;
+            }
+
+            .qr-code img {
+                width: 150px;
+            }
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Video -->
+    <video class="video-background" autoplay muted loop>
+        <source src="https://www.w3schools.com/html/ajk.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="qr_box">
+        <header>
+            <h1>QR Code Generator</h1>
+            <p>Enter a URL and generate your QR code instantly</p>
+        </header>
+
+        <div class="form">
+            <input type="text" id="urlInput" placeholder="Enter URL here" />
+            <button onclick="generateQRCode()">Generate QR Code</button>
+        </div>
+
+        <div class="qr-code">
+            <img id="qrCodeImage" src="" alt="QR Code" />
+        </div>
+    </div>
+
+    <script>
+        function generateQRCode() {
+            var url = document.getElementById('urlInput').value;
+            if (url) {
+                var qrCodeImage = document.getElementById('qrCodeImage');
+                qrCodeImage.src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(url)}&size=180x180`;
+                document.querySelector('.qr_box').classList.add('active');
+            } else {
+                alert("Please enter a URL.");
+            }
+        }
+    </script>
+
+</body>
+</html>
